@@ -2,11 +2,16 @@
 #include "wordmachine.h"
 #include "charmachine.h"
 
+boolean EndWord;
+Word currentWord;
+
 void IgnoreBlanks(){
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : currentChar sembarang
    F.S. : currentChar ≠ BLANK atau currentChar = MARK */
-
+   while (currentChar == BLANK){
+      ADV();
+   }
 }
 
 void STARTWORD(){
@@ -14,7 +19,15 @@ void STARTWORD(){
    F.S. : EndWord = true, dan currentChar = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
           currentChar karakter pertama sesudah karakter terakhir kata */
-
+   START();
+   IgnoreBlanks();
+   if(currentChar == MARK){
+      EndWord = true;
+   }
+   else{
+      CopyWord();
+      IgnoreBlanks();
+   }
 }
 
 void ADVWORD(){
@@ -23,7 +36,13 @@ void ADVWORD(){
           currentChar adalah karakter pertama dari kata berikutnya, mungkin MARK
           Jika currentChar = MARK, EndWord = true.
    Proses : Akuisisi kata menggunakan procedure SalinWord */
-
+   if(currentChar == MARK){
+      EndWord = true;
+   }
+   else{
+      CopyWord();
+      IgnoreBlanks();
+   }
 }
 
 void CopyWord(){
@@ -33,5 +52,16 @@ void CopyWord(){
           currentChar = BLANK atau currentChar = MARK;
           currentChar adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
-
+   int n = 0;
+   while (currentChar != MARK && currentChar != BLANK && n <= NMax){
+      currentWord.TabWord[n] = currentChar;
+      ADV();
+      n++;
+   }
+   if(n > NMax){
+      currentWord.Length = NMax;
+   }
+   else{
+      currentWord.Length = n;
+   }
 }
