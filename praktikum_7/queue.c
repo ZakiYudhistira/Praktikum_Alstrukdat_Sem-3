@@ -45,11 +45,14 @@ void enqueue(Queue *q, ElType val)
     if(isEmpty(*q)){
         IDX_HEAD(*q) = 0;
         IDX_TAIL(*q) = 0;
-        HEAD(*q) = val;
     } else {
-        IDX_TAIL(*q)++;
-        TAIL(*q) = val;
+        if(IDX_TAIL(*q) == CAPACITY - 1){
+            IDX_TAIL(*q) = 0;
+        } else {
+            IDX_TAIL(*q)++;
+        }
     }
+    TAIL(*q) = val;
 }
 
 void dequeue(Queue *q, ElType *val)
@@ -63,7 +66,7 @@ void dequeue(Queue *q, ElType *val)
         IDX_HEAD(*q) = IDX_UNDEF;
         IDX_TAIL(*q) = IDX_UNDEF;
     } else {
-        if(IDX_HEAD(*q) == CAPACITY-1){
+        if(IDX_HEAD(*q) == CAPACITY - 1){
             IDX_HEAD(*q) = 0;
         } else {
             IDX_HEAD(*q)++;
@@ -80,31 +83,24 @@ void displayQueue(Queue q)
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
 /* Jika Queue kosong : menulis [] */
 {
-    int i;
+    int i,j;
     if(isEmpty(q)){
         printf("[]");
-    } else if (length(q)==1){
+    } else {
         printf("[");
         printf("%d",HEAD(q));
-        printf("]\n");
-    } else {
         if(IDX_HEAD(q) <= IDX_TAIL(q)){
-            printf("[");
-            printf("%d",HEAD(q));
             for(i = IDX_HEAD(q)+1;i <= IDX_TAIL(q); i++){
                 printf(",%d",q.buffer[i]);
             }
-            printf("]\n");
         } else {
-            printf("[");
-            printf("%d",HEAD(q));
             for(i = IDX_HEAD(q)+1;i < CAPACITY; i++){
                 printf(",%d",q.buffer[i]);
             }
-            for(i = 0;i <= IDX_TAIL(q);i++){
-                printf(",%d",q.buffer[i]);
+            for(j = 0;j <= IDX_TAIL(q);j++){
+                printf(",%d",q.buffer[j]);
             }
-            printf("]\n");
         }
+        printf("]\n");
     }
 }
