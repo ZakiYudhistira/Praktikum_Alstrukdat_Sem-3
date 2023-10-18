@@ -83,11 +83,9 @@ void displayQueue(Queue q)
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
 /* Jika Queue kosong : menulis [] */
 {
-    int i,j;
-    if(isEmpty(q)){
-        printf("[]");
-    } else {
-        printf("[");
+    int i;
+    printf("[");
+    if(!isEmpty(q)){
         printf("%d",HEAD(q));
         if(IDX_HEAD(q) <= IDX_TAIL(q)){
             for(i = IDX_HEAD(q)+1;i <= IDX_TAIL(q); i++){
@@ -97,10 +95,41 @@ void displayQueue(Queue q)
             for(i = IDX_HEAD(q)+1;i < CAPACITY; i++){
                 printf(",%d",q.buffer[i]);
             }
-            for(j = 0;j <= IDX_TAIL(q);j++){
-                printf(",%d",q.buffer[j]);
+            for(i = 0;i <= IDX_TAIL(q);i++){
+                printf(",%d",q.buffer[i]);
             }
         }
-        printf("]\n");
     }
+    printf("]\n");
 }
+
+// int main(){
+//     int i;
+//     Queue test;
+//     CreateQueue(&test);
+//     // for(i = 0;i < 100;i++){
+//     //     enqueue(&test,i);
+//     // }
+//     // displayQueue(test);
+//     // int buang;
+//     // for(i = 0;i < 20;i++){
+//     //     dequeue(&test, &buang);
+//     //     printf("%d\n", buang);
+//     // }
+//     // printf("%d\n",length(test));
+//     // for(i = 0;i < 15;i++){
+//     //     enqueue(&test, i - 100);
+//     // }
+//     // printf("%d\n",length(test));
+//     // for(i = 0;i < 20;i++){
+//     //     dequeue(&test, &buang);
+//     //     printf("%d\n", buang);
+//     // }
+//     enqueue(&test, 89);
+//     printf("%d\n",test.idxHead);
+//     printf("%d\n", length(test));
+//     displayQueue(test);
+//     if(isEmpty(test)){
+//         printf("ini kosong mas\n");
+//     }
+// }
