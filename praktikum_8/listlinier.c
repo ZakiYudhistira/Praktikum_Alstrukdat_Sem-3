@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include "listlinier.h"
 
+Address newNode(ElType val) {
+    Address p = (Address)malloc(sizeof(Node));
+    if (p != NULL) {
+        INFO(p) = val;
+        NEXT(p) = NULL;
+    }
+    return p;
+}
 /* PROTOTYPE */
 /****************** PEMBUATAN LIST KOSONG ******************/
 void CreateList(List *l)
@@ -22,13 +30,11 @@ ElType getElmt(List l, int idx)
 /* I.S. l terdefinisi, idx indeks yang valid dalam l, yaitu 0..length(l) */
 /* F.S. Mengembalikan nilai elemen l pada indeks idx */
 {
-    int counter;
-    Address p;
-    counter = 0;
-    p = l;
+    int counter = 0;
+    Address p = l;
     while (counter < idx) {
-        counter++;
         p = NEXT(p);
+        counter++;
     }
     return INFO(p);
 }
@@ -37,13 +43,11 @@ void setElmt(List *l, int idx, ElType val)
 /* I.S. l terdefinisi, idx indeks yang valid dalam l, yaitu 0..length(l) */
 /* F.S. Mengubah elemen l pada indeks ke-idx menjadi val */
 {
-    int counter;
-    Address p;
-    counter = 0;
-    p = *l;
+    int counter = 0;
+    Address p = *l;
     while (counter < idx) {
-        counter++;
         p = NEXT(p);
+        counter++;
     }
     INFO(p) = val;
 }
@@ -54,19 +58,16 @@ int indexOf(List l, ElType val)
 /* Jika ada, mengembalikan indeks elemen pertama l yang bernilai val */
 /* Mengembalikan IDX_UNDEF jika tidak ditemukan */
 {
-    int counter;
-    Address p;
-    counter = 0;
-    p = l;
-    while (counter < length(l) && INFO(p) != val) {
+    Address p = l;
+    int counter = 0;
+    while (p != NULL) {
+        if(INFO(p) == val) {
+            return counter;
+        }
         counter++;
         p = NEXT(p);
     }
-    if (INFO(p) == val){
-        return counter;
-    } else {
-        return IDX_UNDEF;
-    }
+    return IDX_UNDEF;
 }
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
@@ -93,8 +94,7 @@ void insertLast(List *l, ElType val)
     if (isEmpty(*l)) {
         insertFirst(l, val);
     } else {
-        Address p;
-        p = newNode(val);
+        Address p = newNode(val);;
         if (p!=NULL) {
             Address Last = *l;
             while(NEXT(Last) != NULL) {
@@ -114,8 +114,7 @@ void insertAt(List *l, ElType val, int idx)
     if (idx == 0) {
         insertFirst(l, val);
     } else {
-        Address p;
-        p = newNode (val);
+        Address p = newNode (val);
         if (p != NULL) {
             int counter = 0;
             Address loc = *l;
@@ -172,12 +171,11 @@ void deleteAt(List *l, int idx, ElType *val)
     } else {
         int counter = 0;
         Address loc = *l;
-        Address p;
         while (counter < idx - 1) {
             loc = NEXT(loc);
-            counter = counter + 1;
+            counter++;
         }
-        p = NEXT(loc);
+        Address p = NEXT(loc);
         *val = INFO(p);
         NEXT(loc) = NEXT(p);
         free(p);
@@ -194,38 +192,28 @@ void displayList(List l)
 /* Jika list kosong : menulis [] */
 /* Tidak ada tambahan karakter apa pun di awal, akhir, atau di tengah */
 {
-    Address p = l;
     printf("[");
-    if (isEmpty(l)) {
-        printf("]\n");
-    } else {
-        boolean first = true;
-        printf("%d",INFO(p));
+    Address p = FIRST(l);
+    while (p != NULL) {
+        printf("%d", INFO(p));
         p = NEXT(p);
-        while (p != NULL) {
-            printf(",%d",INFO(p));
-            p = NEXT(p);
+        if (p != NULL) {
+            printf(",");
         }
-        printf("]\n");
     }
+    printf("]");
 }
 
 int length(List l)
 /* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */
 {
-    if(isEmpty(l)){
-        return 0;
-    } else {
-        int counter;
-        Address p;
-        counter = 0;
-        p = l;
-        while (p != NULL) {
-            counter++;
-            p = NEXT(p);
-        }
-        return counter;
+    Address p = l;
+    int counter = 0;
+    while (p != NULL) {
+        counter++;
+        p = NEXT(p);
     }
+    return counter;
 }
 
 /****************** PROSES TERHADAP LIST ******************/
@@ -236,10 +224,9 @@ List concat(List l1, List l2)
 /* menghasilkan l3 yang baru (dengan elemen list l1 dan l2 secara beurutan). */
 /* Tidak ada alokasi/dealokasi pada prosedur ini */
 {
-    Address p;
     List l3;
     CreateList(&l3);
-    p = l1;
+    Address p = l1;
     while (p != NULL) {
         insertLast(&l3, INFO(l1));
         p = NEXT(p);
@@ -252,24 +239,16 @@ List concat(List l1, List l2)
     return l3;
 }
 
-Address newNode(ElType val) {
-    Address p = (Address)malloc(sizeof(Node));
-    if (p != NULL) {
-        INFO(p) = val;
-        NEXT(p) = NULL;
-    }
-    return p;
-}
 
 // int main() {
 //     List l;
 //     CreateList(&l);
 //     int i;
 //     ElType val = 0;
-//     for(i = 0 ; i < 10 ; i++){
-//         insertLast(&l, i);
-//     }
-//     deleteAt (&l, 5,&val);
+//     // for(i = 0 ; i < 10 ; i++){
+//     //     insertLast(&l, i);
+//     // }
+//     // deleteAt (&l, 5,&val);
 //     displayList(l);
 //     return 0;
 // }
