@@ -228,12 +228,12 @@ List concat(List l1, List l2)
     CreateList(&l3);
     Address p = l1;
     while (p != NULL) {
-        insertLast(&l3, INFO(l1));
+        insertLast(&l3, INFO(p));
         p = NEXT(p);
     }
     p = l2;
     while (p!= NULL) {
-        insertLast(&l3, INFO(l2));
+        insertLast(&l3, INFO(p));
         p = NEXT(p);
     }
     return l3;
@@ -241,14 +241,23 @@ List concat(List l1, List l2)
 
 
 // int main() {
-//     List l;
+//     List l,l2,l3;
 //     CreateList(&l);
+//     CreateList(&l2);
+//     CreateList(&l3);
 //     int i;
 //     ElType val = 0;
-//     // for(i = 0 ; i < 10 ; i++){
-//     //     insertLast(&l, i);
-//     // }
-//     // deleteAt (&l, 5,&val);
+//     for(i = 0 ; i < 10 ; i++){
+//         insertLast(&l, i);
+//     }
+//     for(i = 0 ; i < 10 ; i++){
+//         insertLast(&l2, i);
+//     }
 //     displayList(l);
+//     printf("1\n");
+//     displayList(l2);
+//     printf("2\n");
+//     l3 = concat(l,l2);
+//     displayList(l3);
 //     return 0;
 // }
