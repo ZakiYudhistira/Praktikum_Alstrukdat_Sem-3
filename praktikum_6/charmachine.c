@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 char currentChar;
-boolean EOP;
+boolean EOP; 
 
 static FILE *pita;
 static int retval;
