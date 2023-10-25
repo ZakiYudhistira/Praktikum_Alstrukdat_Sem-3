@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "boolean.h"
 #include "stack.h"
+/*run 100th*/
 
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
