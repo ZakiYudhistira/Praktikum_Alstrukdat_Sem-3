@@ -239,25 +239,49 @@ List concat(List l1, List l2)
     return l3;
 }
 
+void swap(Address *xp, Address *yp) {
+    Address temp;
+    temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
 
-// int main() {
-//     List l,l2,l3;
-//     CreateList(&l);
-//     CreateList(&l2);
-//     CreateList(&l3);
-//     int i;
-//     ElType val = 0;
-//     for(i = 0 ; i < 10 ; i++){
-//         insertLast(&l, i);
-//     }
-//     for(i = 0 ; i < 10 ; i++){
-//         insertLast(&l2, i);
-//     }
-//     displayList(l);
-//     printf("1\n");
-//     displayList(l2);
-//     printf("2\n");
-//     l3 = concat(l,l2);
-//     displayList(l3);
-//     return 0;
-// }
+void sortList(List *l){
+    Address p = l , loc = NULL;
+    int i;
+    for(i = 0 ; i < length(l)-1 ; i++){
+        while(NEXT(p) != NULL){
+            loc = p;
+            p = NEXT(p);
+            if(INFO(loc) > INFO(p)){
+                swap(loc, p);
+            }   
+        }
+    }
+}
+
+List arraytoLinearList(ElType array[], int length){
+    List l;
+    int i;
+    CreateList(&l);
+    for (i = length - 1 ; i >= 0 ; i--){
+        insertFirst(&l, array[i]);
+    }
+    return l;
+}
+
+void deallocList(List *l){
+    ElType garbage;
+    while(*l != NULL){
+        deleteFirst(l, &garbage);
+    }
+}
+
+int main() {
+    List l;
+    ElType array[] = {1,5,3,2};
+    CreateList(&l);
+    l = arrayToLinearList(array, 4);
+    displayList(l);
+    return 0;
+}
