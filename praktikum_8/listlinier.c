@@ -239,49 +239,178 @@ List concat(List l1, List l2)
     return l3;
 }
 
-void swap(Address *xp, Address *yp) {
-    Address temp;
-    temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+/****************** PENCARIAN SEBUAH ELEMEN LIST ******************/
+boolean fSearch(List L, Address P)
+/* Mencari apakah ada elemen list yang beralamat P */
+/* Mengirimkan true jika ada, false jika tidak ada */
+{
+    Address p = L;
+    while ( p != NULL){
+        if (p == P) {
+            return true;
+        }
+        p = NEXT(p);
+    }
+    return false;
 }
-
-void sortList(List *l){
-    Address p = l , loc = NULL;
-    int i;
-    for(i = 0 ; i < length(l)-1 ; i++){
-        while(NEXT(p) != NULL){
-            loc = p;
-            p = NEXT(p);
-            if(INFO(loc) > INFO(p)){
-                swap(loc, p);
-            }   
+Address searchPrec(List L, ElType X)
+/* Mengirimkan address elemen sebelum elemen yang nilainya=X */
+/* Mencari apakah ada elemen list dengan Info(P)=X */
+/* Jika ada, mengirimkan address Prec, dengan Next(Prec)=P dan Info(P)=X. */
+/* Jika tidak ada, mengirimkan Nil */
+/* Jika P adalah elemen pertama, maka Prec=Nil */
+/* Search dengan spesifikasi seperti ini menghindari */
+/* traversal ulang jika setelah Search akan dilakukan operasi lain */
+{
+    Address p = L;
+    Address loc = NULL;
+    boolean found = false;
+    while (NEXT(p) != NULL) {
+        loc = p;
+        p = NEXT(p);
+        if(INFO(p) == X) {
+            return loc;
         }
     }
+    return NULL;
 }
 
-List arraytoLinearList(ElType array[], int length){
-    List l;
-    int i;
-    CreateList(&l);
-    for (i = length - 1 ; i >= 0 ; i--){
-        insertFirst(&l, array[i]);
+/*** Prekondisi untuk Max/Min/Rata-rata : List tidak kosong ***/
+ElType maxValue(List l)
+{
+    Address p = l;
+    int x = INFO(p);
+    while (p != NULL) {
+        if (INFO(p) > x) {
+            x = INFO(p);
+        }
+        p = NEXT(p);
     }
-    return l;
+    return x;
 }
+/* Mengirimkan nilai info(P) yang maksimum */
+Address adrMax(List l){
+    Address p = l;
+    int x = maxValue(l);
+    while (p != NULL) {
+        if (INFO(p) == x) {
+            return p;
+        }
+        p = NEXT(p);
+    }
+}
+/* Mengirimkan address P, dengan info(P) yang bernilai maksimum */
+ElType minValue(List l)
+{
+    Address p = l;
+    int x = INFO(p);
+    while (p != NULL) {
+        if (INFO(p) < x) {
+            x = INFO(p);
+        }
+        p = NEXT(p);
+    }
+    return x;
+}
+/* Mengirimkan nilai info(P) yang minimum */
+Address adrMin(List l)
+{
+    Address p = l;
+    int x = minValue(l);
+    while (p != NULL) {
+        if (INFO(p) == x) {
+            return p;
+        }
+        p = NEXT(p);
+    }
+}
+/* Mengirimkan address P, dengan info(P) yang bernilai minimum */
+float average(List L)
+{
+    float sum = 0, count = 0;
+    Address p = L;
+    while (p != NULL) {
+        sum += (float)INFO(p);
+        count++;
+        p = NEXT(p);
+    }
+    if (count == 0) {
+        return 0;
+    } else {
+        return sum/(count);
+    }
+}
+/* Mengirimkan nilai rata-rata info(P) */
 
-void deallocList(List *l){
-    ElType garbage;
-    while(*l != NULL){
-        deleteFirst(l, &garbage);
+/***************** FUNGSI dan PROSEDUR TAMBAHAN **************/
+void deleteAll(List *l)
+/* Delete semua elemen list dan alamat elemen di-dealokasi */
+{
+    ElType buang;
+    while ( *l != NULL )
+    {
+        deleteFirst(l,&buang);
     }
 }
 
-int main() {
-    List l;
-    ElType array[] = {1,5,3,2};
-    CreateList(&l);
-    l = arrayToLinearList(array, 4);
-    displayList(l);
-    return 0;
+void copyList(List *l1, List *l2)
+/* I.S. L1 sembarang. F.S. L2=L1 */
+/* L1 dan L2 "menunjuk" kepada list yang sama.*/
+/* Tidak ada alokasi/dealokasi elemen */
+{
+    *l2 = *l1;
 }
+
+void inverseList(List *l)
+/* I.S. sembarang. */
+/* F.S. elemen list dibalik : */
+/* Elemen terakhir menjadi elemen pertama, dan seterusnya. */
+/* Membalik elemen list, tanpa melakukan alokasi/dealokasi. */
+{
+    Address loc = NULL;
+    Address p = *l;
+    Address new_first;
+    int jumlah = length(*l);
+    while( NEXT(p) != NULL) {
+        loc = p;
+        p = NEXT(p);
+    }
+    new_first = p;
+    NEXT(loc) = NULL;
+    while ((NEXT(*l) != NULL)) {
+        p = *l;
+        while (NEXT(p) != NULL) {
+            loc = p;
+            p = NEXT(p);
+        }
+        Address j;
+        j = new_first;
+        while (NEXT(j) != NULL) {
+            j = NEXT(j);
+        }
+        NEXT(j) = p;
+        NEXT(loc) = NULL;
+    }
+    Address j;
+    j = new_first;
+    while(NEXT(j) != NULL) {
+        j = NEXT(j);
+    }
+    NEXT(j) = *l;
+    *l = new_first;
+}
+
+
+// int main() {
+//     List l;
+//     CreateList(&l);;
+//     int i;
+//     for(i = 0 ; i < 10 ; i++){
+//         insertLast(&l, i);
+//     }
+//     displayList(l);
+//     printf("\n");
+//     inverseList(&l);
+//     displayList(l);
+//     return 0;
+// }
