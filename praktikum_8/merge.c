@@ -1,5 +1,7 @@
 #include "merge.h"
+#include "listlinier.h"
 #include <stdio.h>
+#define endl printf("\n");
 
 void splitList(List source, List* front, List* back)
 /* Fungsi untuk memecah sebuah list dengan head source menjadi dua buah 
@@ -12,27 +14,33 @@ void splitList(List source, List* front, List* back)
     int listLength = length(source);
     int count = 0;
     int midPoint = listLength/2;
-    Address pFront = NULL;
-    Address pBack = source;
+    Address p = source;
     if(listLength % 2 == 0){
-        while(count < midPoint){
-            pFront = pBack;
-            pBack = NEXT(pBack);
-            count++;
+        while(p != NULL){
+            if(count < midPoint){
+                insertLast(front, INFO(p));
+                count++;
+            } else {
+                insertLast(back, INFO(p));
+            }
+            p = NEXT(p);
+            
         }
     } else {
         midPoint++;
-        while(count < midPoint){
-            pFront = pBack;
-            pBack = NEXT(pBack);
-            count++;
+        while(p != NULL){
+            if(count < midPoint){
+                insertLast(front, INFO(p));
+                count++;
+            } else {
+                insertLast(back, INFO(p));
+            }
+            p = NEXT(p);
         }
     }
-    *front = pFront;
-    *back = pBack;
 }
 
-List merge(List a, List b);
+List merge(List a, List b)
 /* Fungsi untuk melakukan merge sort list a dan b secara rekursif.
    Sort dilakukan secara ascending berdasarkan nilai elemen.
    Apabila List a = NULL, maka kembalikan List b
@@ -40,8 +48,51 @@ List merge(List a, List b);
    Selain itu, lakukan perbandingan antara INFO(a) dengan 
    INFO(b) untuk mendapatkan urutannya
 */
+{
+    List l3;
+    CreateList(&l3);
+    if(a == NULL){
+        return b;
+    } else if (b == NULL){
+        return a;
+    } else {
+        Address pa = FIRST(a);
+        Address pb = FIRST(b);
+        while(pa != NULL && pb != NULL){
+            if(INFO(pa) < INFO(pb)){
+                insertLast(&l3, INFO(pa));
+                pa = NEXT(pa);
+            } else {
+                insertLast(&l3, INFO(pb));
+                pb = NEXT(pb);
+            }
+        }
+        while(pa != NULL){
+            insertLast(&l3, INFO(pa));
+            pa = NEXT(pa);
+        }
+        while(pb != NULL){
+            insertLast(&l3, INFO(pb));
+            pb = NEXT(pb);
+        }
+        return l3;
+    }
+}
 
-void mergeSort(List* list);
+void mergeSort(List* list){
+    displayList(*list);
+    endl;
+    if(length(*list) == 1){
+        return ;
+    }
+    List front, back;
+    CreateList(&front);
+    CreateList(&back);
+    splitList(*list, &front, &back);
+    mergeSort(&front);
+    mergeSort(&back);
+    *list = merge(front ,back);
+}
 /* Fungsi untuk melakukan inisialisasi merge sort secara rekursif.
    Setiap kali fungsi dipanggil, maka tampilkan list yang sekarang
    sedang diproses.
@@ -53,17 +104,16 @@ void mergeSort(List* list);
 int main(){
     int i;
     List test, front, back;
-    CreateList(&front);
-    CreateList(&back);
     CreateList(&test);
-    for(i = 0 ; i < 5 ; i++){
-        insertFirst(&test, i);
-    }
+    insertFirst(&test, 91);
+    insertFirst(&test, 1);
+    insertFirst(&test, 6);
+    insertFirst(&test, 71);
+    insertFirst(&test, 55);
+    // insertFirst(&test, 77);
+    endl;
+    mergeSort(&test);
     displayList(test);
-    printf("\n");
-    splitList(test, &front, &back);
-    displayList(front);
-    displayList(back);
 
     return 0;
 }
