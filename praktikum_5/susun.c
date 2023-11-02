@@ -4,21 +4,21 @@
 #define endin printf("\n");
 
 boolean compare(Word word1, Word word2){
-    if (word1.Length < word2.Length){
-        return true;
-    } else if (word1.Length > word2.Length){
-        return false;
+    int i, length;
+    if(word1.Length < word2.Length){
+        length = word1.Length;
     } else {
-        int length = word1.Length;
-        int i;
-        for(i = 0 ; i < length ; i++){
-            if(word1.TabWord[i] != word2.TabWord[i]){
-                if(word1.TabWord[i]-'a' > word2.TabWord[i]-'a'){
-                    return false;
-                } 
-            }
-        } return true;
+        length = word2.Length;
     }
+    for(i = 0 ; i < length ; i++){
+        if(word1.TabWord[i] != word2.TabWord[i]){
+            if(word1.TabWord[i] - 'a' < word2.TabWord[i] - 'a'){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } return word1.Length <= word2.Length;
 }
 
 void bubbleSort(Word array[], int length){
@@ -53,7 +53,7 @@ int main(){
     }
     // bubbleSort(listWord, i+1);
     int j;
-    bubbleSort(listWord,i+1);
+    bubbleSort(listWord,i);
     for(j = 0 ; j < i ; j++){
         printWord(listWord[j]);
         endin;
