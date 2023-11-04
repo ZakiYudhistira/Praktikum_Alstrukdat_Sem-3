@@ -102,18 +102,18 @@ void pop(Stack *s, ElType *x)
     }
 }
 
-int main(){
-    Stack s;
-    CreateStack(&s);
-    push(&s,9);
-    push(&s,9);
-    push(&s,9);
-    push(&s,9);
-    ElType buang;
-    pop(&s,&buang);
-    pop(&s,&buang);
-    pop(&s,&buang);
-    pop(&s,&buang);
-    DisplayStack(s);
-    return 0;
-}
+// int main(){
+//     Stack s;
+//     CreateStack(&s);
+//     push(&s,9);
+//     push(&s,9);
+//     push(&s,9);
+//     push(&s,9);
+//     ElType buang;
+//     pop(&s,&buang);
+//     pop(&s,&buang);
+//     pop(&s,&buang);
+//     pop(&s,&buang);
+//     DisplayStack(s);
+//     return 0;
+// }
